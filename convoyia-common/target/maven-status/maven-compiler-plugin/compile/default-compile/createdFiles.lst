@@ -96,13 +96,13 @@ com/goweyy/convoyia/common/simulation/ConvoySimulationRunner.class
 com/goweyy/convoyia/common/domain/enums/LlmModel.class
 com/goweyy/convoyia/common/simulation/worldwide/MultiCurrencyScenario$TenantPricingContext.class
 com/goweyy/convoyia/common/domain/records/VerificationAlert.class
-com/goweyy/convoyia/common/simulation/scenarios/ConvoyMinimumFareSenario.class
 com/goweyy/convoyia/common/config/WebClientConfig.class
 com/goweyy/convoyia/common/simulation/ConvoySimulationReport$ConvoySimulationReportBuilder.class
 com/goweyy/convoyia/common/kafka/KafkaEventPublisher.class
 com/goweyy/convoyia/common/domain/events/VerificationCompletedEvent.class
 com/goweyy/convoyia/common/domain/records/VerificationRequest$VerificationRequestBuilder.class
 com/goweyy/convoyia/common/domain/events/MissionDispatchedEvent$MissionDispatchedEventBuilder.class
+com/goweyy/convoyia/common/simulation/scenarios/ConvoyMinimumFareScenario.class
 com/goweyy/convoyia/common/domain/records/DispatchDecision.class
 com/goweyy/convoyia/common/config/ConvoyIaProperties.class
 com/goweyy/convoyia/common/simulation/scenarios/ConvoyConveyorSplitScenario.class

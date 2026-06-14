@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ConvoyMinimumFareSenario implements ConvoyScenario {
+public class ConvoyMinimumFareScenario implements ConvoyScenario {
 
     @Override
-    public String name() { return "ConvoyMinimumFareSenario"; }
+    public String name() { return "ConvoyMinimumFareScenario"; }
 
     @Override
     public void run() throws Exception {

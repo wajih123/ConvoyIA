@@ -68,7 +68,7 @@
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyDamageDetectionScenario.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyDriverVerificationScenario.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyLlmFallbackScenario.java
-/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyMinimumFareSenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyMinimumFareScenario.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyPreAuthCaptureScenario.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyPremiumSegmentScenario.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/scenarios/ConvoyStandardMissionScenario.java

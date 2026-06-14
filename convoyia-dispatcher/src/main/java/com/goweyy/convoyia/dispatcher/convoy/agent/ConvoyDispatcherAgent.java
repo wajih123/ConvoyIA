@@ -1,6 +1,7 @@
 package com.goweyy.convoyia.dispatcher.convoy.agent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goweyy.convoyia.common.config.ConvoyIaProperties;
 import com.goweyy.convoyia.common.domain.enums.ConvoyMissionState;
 import com.goweyy.convoyia.common.domain.enums.ConvoyUrgency;
 import com.goweyy.convoyia.common.domain.enums.ConvoyVehicleSegment;
@@ -29,13 +30,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConvoyDispatcherAgent {
 
-    private static final double CONFIDENCE_THRESHOLD = 0.72;
-
     private final ConvoyLlmGateway llmGateway;
     private final ConvoyDispatcherPromptBuilder promptBuilder;
     private final ConvoyMissionContextRepository contextRepository;
     private final ConvoyKafkaEventPublisher kafkaEventPublisher;
     private final ObjectMapper objectMapper;
+    private final ConvoyIaProperties convoyIaProperties;
 
     public ConvoyDispatchDecision dispatch(ConvoyDispatchRequest request) {
         UUID missionId = UUID.randomUUID();
@@ -77,7 +77,7 @@ public class ConvoyDispatcherAgent {
         ctx.setConfidenceScore(confidence);
         agentTrace.add("QUALIFYING: segment=" + segment + " confidence=" + confidence);
 
-        if (confidence < CONFIDENCE_THRESHOLD) {
+        if (confidence < convoyIaProperties.getLlm().getConfidenceThreshold()) {
             ctx.setCurrentState(ConvoyMissionState.ESCALATED_HUMAN);
         } else {
             ctx.setCurrentState(ConvoyMissionState.ROUTING);

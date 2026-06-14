@@ -34,7 +34,7 @@ public class ConvoyPricingCalculationService {
     private static final BigDecimal RATE_PER_KM           = new BigDecimal("0.80");
     private static final BigDecimal FLAT_BASE             = new BigDecimal("15.00");
     private static final BigDecimal VAT_RATE              = new BigDecimal("0.20");
-    private static final BigDecimal STRIPE_PRE_AUTH_MULT  = new BigDecimal("1.20");
+    // STRIPE_PRE_AUTH (×1.20) is computed ONLY in ConvoyBillerAgent (rule 6)
     private static final BigDecimal EXPRESS_MULT          = new BigDecimal("1.15");
     private static final BigDecimal URGENT_MULT           = new BigDecimal("1.30");
 
@@ -96,9 +96,7 @@ public class ConvoyPricingCalculationService {
         // Split: 75% conveyor, 25% platform — LOCKED (rule 4)
         BigDecimal platformFee    = totalTtc.multiply(PLATFORM_SHARE_RATIO).setScale(2, RoundingMode.HALF_UP);
         BigDecimal conveyorPayout = totalTtc.multiply(CONVEYOR_SHARE_RATIO).setScale(2, RoundingMode.HALF_UP);
-
-        // Stripe pre-auth = totalTtc × 1.20, rounded up (rule 6 — amount defined here, captured in ConvoyBillerAgent)
-        BigDecimal stripePreAuth = totalTtc.multiply(STRIPE_PRE_AUTH_MULT).setScale(2, RoundingMode.CEILING);
+        // NOTE: Stripe pre-auth (totalTtc × 1.20) is computed ONLY in ConvoyBillerAgent (rule 6)
 
         log.info("[ConvoyPricer] missionId={} totalTtc={} conveyor={} platform={}",
                 request.getMissionId(), totalTtc, conveyorPayout, platformFee);
@@ -117,11 +115,10 @@ public class ConvoyPricingCalculationService {
                 .totalTtc(totalTtc)
                 .conveyorPayout(conveyorPayout)
                 .platformFeeAmount(platformFee)
-                .stripePreAuthAmount(stripePreAuth)
                 .minimumFareApplied(minimumApplied)
-                .currencyCode("EUR") // resolved from ConvoyMarket.FRANCE — not hardcoded elsewhere
+                .currencyCode(com.goweyy.convoyia.common.domain.enums.ConvoyMarket.FRANCE.getCurrencyCode())
                 .currencySymbol("€")
-                .taxName("TVA")
+                .taxName(com.goweyy.convoyia.common.domain.enums.ConvoyMarket.FRANCE.getTaxName())
                 .build();
 
         return ConvoyPricingResult.builder()
