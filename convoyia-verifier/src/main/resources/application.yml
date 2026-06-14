@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: convoyia-verifier
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:convoyia}
+    username: ${DB_USER:convoyia}
+    password: ${DB_PASSWORD:convoyia}
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:convoyia}
+    user: ${DB_USER:convoyia}
+    password: ${DB_PASSWORD:convoyia}
+    locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: verifier-agent
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+server:
+  port: 8082
+
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://ollama-service:11434}
+
+hiscox:
+  base-url: ${HISCOX_BASE_URL:http://hiscox-api}
+
+keycloak:
+  admin-url: ${KEYCLOAK_ADMIN_URL:http://keycloak:8080}
+  realm: ${KEYCLOAK_REALM:convoyia}
+
+llm:
+  confidence-threshold: 0.72
+  timeout-seconds: 8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
