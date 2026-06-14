@@ -28,9 +28,7 @@ export default function Platform() {
     <section id="platform" className="py-24 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-16">
-          <p className="section-label">
-            <BrainCircuit size={14} /> What is ConvoyIA
-          </p>
+          <p className="section-label"><BrainCircuit size={14} /> What is ConvoyIA</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
             Infrastructure for{" "}
             <span className="text-gradient">vehicle conveyance</span> platforms
@@ -41,7 +39,6 @@ export default function Platform() {
             production-grade AI — deployed on Kubernetes in hours.
           </p>
         </div>
-
         <div className="grid sm:grid-cols-2 gap-6">
           {pillars.map((p) => (
             <div key={p.title} className="card-glass p-7 hover:border-brand-600/40 transition-colors">
