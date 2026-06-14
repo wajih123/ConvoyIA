@@ -1,0 +1,3 @@
+com/goweyy/convoyia/gateway/GatewayApplication.class
+com/goweyy/convoyia/gateway/SecurityConfig.class
+com/goweyy/convoyia/gateway/TenantExtractionFilter.class

@@ -107,7 +107,7 @@ public class InspectorAgent {
         return llmGateway.invoke(llmRequest)
                 .map(response -> {
                     try {
-                        Map<?, ?> parsed = objectMapper.readValue(response, Map.class);
+                        @SuppressWarnings("unchecked") Map<String, Object> parsed = (Map<String, Object>) objectMapper.readValue(response, Map.class);
                         @SuppressWarnings("unchecked")
                         List<String> newDamages = (List<String>) parsed.getOrDefault("newDamages", List.of());
                         String verdict = (String) parsed.getOrDefault("verdict", "CLEAN");

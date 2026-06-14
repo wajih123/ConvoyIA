@@ -79,7 +79,7 @@ public class PricingConfigController {
                 .build();
 
         return configRepository.upsertConfig(securedConfig)
-                .thenReturn(ResponseEntity.<Void>ok().build())
+                .thenReturn(ResponseEntity.ok().<Void>build())
                 .doOnSuccess(r -> log.info("Pricing config updated for tenantId={}", tenantId));
     }
 

@@ -60,7 +60,7 @@ public class QwenVlAdapter {
 
     private DamageReport parseResponse(String response, String base64Image) {
         try {
-            Map<?, ?> parsed = objectMapper.readValue(response, Map.class);
+            @SuppressWarnings("unchecked") Map<String, Object> parsed = (Map<String, Object>) objectMapper.readValue(response, Map.class);
             @SuppressWarnings("unchecked")
             List<String> damageAreas = (List<String>) parsed.getOrDefault("damageAreas", List.of());
             String severity = (String) parsed.getOrDefault("severity", "NONE");
