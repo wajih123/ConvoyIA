@@ -58,12 +58,17 @@ public class ConvoyUrgentMissionScenario implements ConvoyScenario {
         assertThat(ttcUrgent.compareTo(ttcExpress) > 0,
                 "Urgent TTC must exceed Express TTC");
 
-        // Verify exact express HT: 95 + 14.25 = 109.25
-        assertThat(htExpress.compareTo(new BigDecimal("109.25")) == 0,
-                "Express HT should be 109.25, got " + htExpress);
-        // Verify exact urgent HT: 95 + 28.50 = 123.50
-        assertThat(htUrgent.compareTo(new BigDecimal("123.50")) == 0,
-                "Urgent HT should be 123.50, got " + htUrgent);
+        // Verify exact express HT: transport + (transport × EXPRESS_MULT)
+        BigDecimal expectedHtExpress = transport.add(transport.multiply(EXPRESS_MULT).setScale(2, RoundingMode.HALF_UP))
+                .setScale(2, RoundingMode.HALF_UP);
+        assertThat(htExpress.compareTo(expectedHtExpress) == 0,
+                "Express HT should be " + expectedHtExpress + ", got " + htExpress);
+
+        // Verify exact urgent HT: transport + (transport × URGENT_MULT)
+        BigDecimal expectedHtUrgent = transport.add(transport.multiply(URGENT_MULT).setScale(2, RoundingMode.HALF_UP))
+                .setScale(2, RoundingMode.HALF_UP);
+        assertThat(htUrgent.compareTo(expectedHtUrgent) == 0,
+                "Urgent HT should be " + expectedHtUrgent + ", got " + htUrgent);
 
         log.info("[Scenario] {} — PASSED (standard={}, express={}, urgent={})",
                 name(), htStandard, htExpress, htUrgent);
