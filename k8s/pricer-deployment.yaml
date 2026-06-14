@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convoyia-pricer
+  namespace: convoyia
+  labels:
+    app: convoyia-pricer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: convoyia-pricer
+  template:
+    metadata:
+      labels:
+        app: convoyia-pricer
+    spec:
+      containers:
+        - name: convoyia-pricer
+          image: goweyy/convoyia-pricer:latest
+          ports:
+            - containerPort: 8083
+          envFrom:
+            - configMapRef:
+                name: convoyia-config
+            - secretRef:
+                name: convoyia-secrets
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8083
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convoyia-pricer
+  namespace: convoyia
+spec:
+  selector:
+    app: convoyia-pricer
+  ports:
+    - port: 80
+      targetPort: 8083

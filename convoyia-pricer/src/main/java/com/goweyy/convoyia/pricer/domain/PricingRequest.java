@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 public class PricingRequest {
     String missionId;
     String tenantId;
-    String originAddress;
-    String destinationAddress;
     VehicleSegment vehicleSegment;
-    MissionUrgency urgency;
+    double vehicleDeclaredValue;
+    double estimatedDistanceKm;
     LocalDateTime requestedAt;
-    Double estimatedDistanceKm;
+    MissionUrgency urgency;
 }

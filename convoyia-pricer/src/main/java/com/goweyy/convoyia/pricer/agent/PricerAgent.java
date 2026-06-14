@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.pricer.agent;
 
+import com.goweyy.convoyia.common.domain.enums.PricingStatus;
 import com.goweyy.convoyia.common.domain.enums.VehicleSegment;
 import com.goweyy.convoyia.common.domain.enums.VerificationStatus;
 import com.goweyy.convoyia.common.domain.events.PricingCompletedEvent;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.math.BigDecimal;
 
 @Slf4j
 @Service
@@ -28,30 +30,26 @@ public class PricerAgent {
     public Mono<PricingResult> price(PricingRequest request) {
         log.info("Pricing missionId={} segment={}", request.getMissionId(), request.getVehicleSegment());
 
-        if (request.getVehicleSegment() == VehicleSegment.LUXE_PLATEAU) {
-            log.info("LUXE_PLATEAU segment - returning PENDING_MANUAL_QUOTE for missionId={}", request.getMissionId());
-            PricingResult result = PricingResult.builder()
-                    .missionId(request.getMissionId())
-                    .tenantId(request.getTenantId())
-                    .status("PENDING_MANUAL_QUOTE")
-                    .currency("EUR")
-                    .pricedAt(Instant.now())
-                    .build();
-            return Mono.just(result);
-        }
-
         return calculationService.calculate(request)
-                .flatMap(result -> kafkaEventPublisher.publishEvent(
-                        PricingCompletedEvent.builder()
-                                .missionId(result.getMissionId())
-                                .tenantId(result.getTenantId())
-                                .totalTtc(result.getTotalTtc())
-                                .conveyorShare(result.getConveyorShare())
-                                .platformShare(result.getPlatformShare())
-                                .occurredAt(Instant.now())
-                                .build(),
-                        KafkaTopicsConfig.TOPIC_MISSION_PRICING_COMPLETED
-                ).thenReturn(result));
+                .flatMap(result -> {
+                    if (result.getStatus() == PricingStatus.PENDING_MANUAL_QUOTE) {
+                        return Mono.just(result);
+                    }
+                    BigDecimal totalTtc = result.getPricingBreakdown().getTotalTtc();
+                    BigDecimal conveyorPayout = result.getPricingBreakdown().getConveyorPayout();
+                    BigDecimal platformFee = result.getPricingBreakdown().getPlatformFeeAmount();
+                    return kafkaEventPublisher.publishEvent(
+                            PricingCompletedEvent.builder()
+                                    .missionId(result.getMissionId())
+                                    .tenantId(result.getTenantId())
+                                    .totalTtc(totalTtc)
+                                    .conveyorShare(conveyorPayout)
+                                    .platformShare(platformFee)
+                                    .occurredAt(Instant.now())
+                                    .build(),
+                            KafkaTopicsConfig.TOPIC_MISSION_PRICING_COMPLETED
+                    ).thenReturn(result);
+                });
     }
 
     @KafkaListener(topics = KafkaTopicsConfig.TOPIC_MISSION_VERIFICATION_COMPLETED,

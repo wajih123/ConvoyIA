@@ -1,0 +1,92 @@
+---
+# Ollama Deployment — runs local LLMs: Phi-3 Mini, Mistral 7B, LLaMA 3 8B, Qwen-VL 7B
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-pvc
+  namespace: convoyia
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: convoyia
+  labels:
+    app: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      initContainers:
+        # Pull all 4 required models on first start
+        - name: model-puller
+          image: ollama/ollama:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ollama serve &
+              sleep 5
+              ollama pull phi3:mini
+              ollama pull mistral:7b-instruct
+              ollama pull llama3:8b
+              ollama pull qwen:7b
+              kill %1
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          ports:
+            - containerPort: 11434
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+          resources:
+            requests:
+              cpu: "2"
+              memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+          livenessProbe:
+            httpGet:
+              path: /api/tags
+              port: 11434
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/tags
+              port: 11434
+            initialDelaySeconds: 60
+            periodSeconds: 10
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: ollama-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: convoyia
+spec:
+  selector:
+    app: ollama
+  ports:
+    - port: 11434
+      targetPort: 11434

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convoyia-inspector
+  namespace: convoyia
+  labels:
+    app: convoyia-inspector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: convoyia-inspector
+  template:
+    metadata:
+      labels:
+        app: convoyia-inspector
+    spec:
+      containers:
+        - name: convoyia-inspector
+          image: goweyy/convoyia-inspector:latest
+          ports:
+            - containerPort: 8084
+          envFrom:
+            - configMapRef:
+                name: convoyia-config
+            - secretRef:
+                name: convoyia-secrets
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8084
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8084
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convoyia-inspector
+  namespace: convoyia
+spec:
+  selector:
+    app: convoyia-inspector
+  ports:
+    - port: 80
+      targetPort: 8084

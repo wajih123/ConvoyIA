@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: convoyia-config
+  namespace: convoyia
+data:
+  DB_HOST: "postgres"
+  DB_NAME: "convoyia"
+  KAFKA_BOOTSTRAP: "kafka:9092"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  OLLAMA_BASE_URL: "http://ollama-service:11434"
+  KEYCLOAK_ISSUER_URI: "http://keycloak:8080/realms/convoyia"
+  MINIO_BASE_URL: "http://minio:9000"
+  MINIO_BUCKET: "convoyia-invoices"
