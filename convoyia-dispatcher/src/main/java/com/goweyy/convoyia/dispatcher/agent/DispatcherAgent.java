@@ -77,7 +77,7 @@ public class DispatcherAgent {
         return llmGateway.invoke(llmRequest)
                 .map(response -> {
                     try {
-                        Map<?, ?> parsed = objectMapper.readValue(response, Map.class);
+                        @SuppressWarnings("unchecked") Map<String, Object> parsed = (Map<String, Object>) objectMapper.readValue(response, Map.class);
                         String segmentStr = (String) parsed.get("segment");
                         double confidence = ((Number) parsed.getOrDefault("confidence", 0.0)).doubleValue();
                         String urgencyStr = (String) parsed.get("urgencyConfirmed");
@@ -128,7 +128,7 @@ public class DispatcherAgent {
         return llmGateway.invoke(llmRequest)
                 .map(response -> {
                     try {
-                        Map<?, ?> parsed = objectMapper.readValue(response, Map.class);
+                        @SuppressWarnings("unchecked") Map<String, Object> parsed = (Map<String, Object>) objectMapper.readValue(response, Map.class);
                         int duration = ((Number) parsed.getOrDefault("estimatedDurationMin", 60)).intValue();
                         String notes = (String) parsed.getOrDefault("notes", "");
                         context.getEnrichedData().put("estimatedDurationMin", duration);

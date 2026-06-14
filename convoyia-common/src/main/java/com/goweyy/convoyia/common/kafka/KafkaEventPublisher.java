@@ -17,7 +17,7 @@ public class KafkaEventPublisher {
     public Mono<Void> publishEvent(Object event, String topic) {
         return Mono.fromFuture(() -> {
                     log.info("Publishing event to topic={} type={}", topic, event.getClass().getSimpleName());
-                    return kafkaTemplate.send(topic, event).completable();
+                    return kafkaTemplate.send(topic, event).toCompletableFuture();
                 })
                 .subscribeOn(Schedulers.boundedElastic())
                 .doOnError(e -> log.error("Failed to publish event to topic={} type={}: {}",

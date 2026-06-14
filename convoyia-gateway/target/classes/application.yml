@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: convoyia-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: dispatcher
+          uri: lb://convoyia-dispatcher
+          predicates:
+            - Path=/api/v1/convoy/dispatch/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-dispatcher
+
+        - id: verifier
+          uri: lb://convoyia-verifier
+          predicates:
+            - Path=/api/v1/convoy/verify/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-verifier
+
+        - id: pricer
+          uri: lb://convoyia-pricer
+          predicates:
+            - Path=/api/v1/convoy/price/**,/api/v1/admin/pricing/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-pricer
+
+        - id: inspector
+          uri: lb://convoyia-inspector
+          predicates:
+            - Path=/api/v1/convoy/inspect/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-inspector
+
+        - id: tracker
+          uri: lb://convoyia-tracker
+          predicates:
+            - Path=/api/v1/convoy/track/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-tracker
+
+        - id: biller
+          uri: lb://convoyia-biller
+          predicates:
+            - Path=/api/v1/convoy/bill/**
+          filters:
+            - AddRequestHeader=X-Service-Name, convoyia-biller
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://keycloak:8080/realms/convoyia}
+
+server:
+  port: 8080
+
+redis:
+  host: ${REDIS_HOST:redis}
+  port: ${REDIS_PORT:6379}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      probes:
+        enabled: true

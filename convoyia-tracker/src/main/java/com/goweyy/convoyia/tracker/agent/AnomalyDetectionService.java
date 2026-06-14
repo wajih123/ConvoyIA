@@ -79,7 +79,7 @@ public class AnomalyDetectionService {
         return llmGateway.invoke(llmRequest)
                 .map(response -> {
                     try {
-                        Map<?, ?> parsed = objectMapper.readValue(response, Map.class);
+                        @SuppressWarnings("unchecked") Map<String, Object> parsed = (Map<String, Object>) objectMapper.readValue(response, Map.class);
                         boolean anomalous = Boolean.TRUE.equals(parsed.get("anomalous"));
                         if (anomalous) {
                             return List.of(AnomalyAlert.builder()
