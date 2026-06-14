@@ -1,9 +1,7 @@
 package com.goweyy.convoyia.verifier.llm;
 
-import com.goweyy.convoyia.common.domain.records.ConveyorData;
 import com.goweyy.convoyia.common.domain.records.VehicleData;
 import com.goweyy.convoyia.common.domain.records.VerificationRequest;
-import com.goweyy.convoyia.common.domain.records.VerificationResult;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +16,11 @@ public class VerifierPromptBuilder {
             """;
 
     public String buildVehicleCoherencePrompt(VehicleData vehicle) {
+        return buildVehicleCoherencePrompt(vehicle, "french");
+    }
+
+    public String buildVehicleCoherencePrompt(VehicleData vehicle, String language) {
+        String jsonInstruction = resolveJsonInstruction(language);
         return """
                 Tu es un expert en évaluation automobile pour une plateforme de convoyage en France.
                 
@@ -33,7 +36,7 @@ public class VerifierPromptBuilder {
                 Segments et plages:
                 %s
                 
-                Réponds UNIQUEMENT en JSON valide:
+                %s
                 {
                   "coherent": true,
                   "expectedSegment": "SEGMENT_VALUE",
@@ -46,11 +49,17 @@ public class VerifierPromptBuilder {
                 vehicle.getYear(),
                 vehicle.getDeclaredValue(),
                 vehicle.getDeclaredSegment(),
-                SEGMENT_RANGES
+                SEGMENT_RANGES,
+                jsonInstruction
         );
     }
 
     public String buildAddressValidationPrompt(String origin, String destination) {
+        return buildAddressValidationPrompt(origin, destination, "french");
+    }
+
+    public String buildAddressValidationPrompt(String origin, String destination, String language) {
+        String jsonInstruction = resolveJsonInstruction(language);
         return """
                 Tu es un expert en géolocalisation pour la France.
                 
@@ -58,20 +67,29 @@ public class VerifierPromptBuilder {
                 - Adresse d'origine: %s
                 - Adresse de destination: %s
                 
-                Réponds UNIQUEMENT en JSON valide:
+                %s
                 {
                   "valid": true,
                   "originValid": true,
                   "destinationValid": true,
                   "reason": "Explication"
                 }
-                """.formatted(origin, destination);
+                """.formatted(origin, destination, jsonInstruction);
     }
 
-    public String buildEscalationPrompt(VerificationRequest req, 
+    public String buildEscalationPrompt(VerificationRequest req,
                                          com.goweyy.convoyia.common.domain.records.VerificationBlock vehicle,
                                          com.goweyy.convoyia.common.domain.records.VerificationBlock conveyor,
                                          com.goweyy.convoyia.common.domain.records.VerificationBlock mission) {
+        return buildEscalationPrompt(req, vehicle, conveyor, mission, "french");
+    }
+
+    public String buildEscalationPrompt(VerificationRequest req,
+                                         com.goweyy.convoyia.common.domain.records.VerificationBlock vehicle,
+                                         com.goweyy.convoyia.common.domain.records.VerificationBlock conveyor,
+                                         com.goweyy.convoyia.common.domain.records.VerificationBlock mission,
+                                         String language) {
+        String jsonInstruction = resolveJsonInstruction(language);
         return """
                 Tu es un agent de supervision pour une plateforme de convoyage automobile en France.
                 
@@ -84,7 +102,7 @@ public class VerifierPromptBuilder {
                 Résultat vérification convoyeur: %s
                 Résultat vérification mission: %s
                 
-                Réponds UNIQUEMENT en JSON valide:
+                %s
                 {
                   "recommendation": "APPROVE|REJECT|REVIEW",
                   "priorityLevel": "LOW|MEDIUM|HIGH|CRITICAL",
@@ -96,7 +114,21 @@ public class VerifierPromptBuilder {
                 req.getTenantId(),
                 vehicle != null ? vehicle.getStatus() : "N/A",
                 conveyor != null ? conveyor.getStatus() : "N/A",
-                mission != null ? mission.getStatus() : "N/A"
+                mission != null ? mission.getStatus() : "N/A",
+                jsonInstruction
         );
+    }
+
+    /**
+     * Resolves the JSON-only instruction string for the given language.
+     */
+    static String resolveJsonInstruction(String language) {
+        return switch (language == null ? "french" : language.toLowerCase()) {
+            case "french"  -> "Réponds UNIQUEMENT en JSON valide:";
+            case "german"  -> "Antworte NUR mit gültigem JSON:";
+            case "spanish" -> "Responde ÚNICAMENTE en JSON válido:";
+            case "arabic"  -> "أجب فقط بـ JSON صالح:";
+            default        -> "Reply ONLY with valid JSON:";
+        };
     }
 }

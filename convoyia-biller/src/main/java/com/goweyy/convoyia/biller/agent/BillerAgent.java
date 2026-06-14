@@ -55,13 +55,17 @@ public class BillerAgent {
         BigDecimal totalTtc = breakdown.getTotalTtc();
         BigDecimal conveyorPayout = breakdown.getConveyorPayout();
         BigDecimal platformFee = breakdown.getPlatformFeeAmount();
+        // Use tenant's stripe currency from breakdown (falls back to "eur" if not set)
+        String stripeCurrency = breakdown.getCurrencyCode() != null
+                ? breakdown.getCurrencyCode().toLowerCase()
+                : "eur";
 
         // STEP 2: Capture Stripe pre-auth (was authorized at totalTtc × 1.20)
-        return stripeConnectService.capturePreAuth(request.getPaymentIntentId(), totalTtc)
+        return stripeConnectService.capturePreAuth(request.getPaymentIntentId(), totalTtc, stripeCurrency)
                 .flatMap(chargeId ->
-                        // STEP 3: Split transfer — 75% to conveyor (ALWAYS)
+                        // STEP 3: Split transfer — conveyor share (ALWAYS)
                         stripeConnectService.splitTransfer(
-                                request.getConveyorStripeAccountId(), conveyorPayout)
+                                request.getConveyorStripeAccountId(), conveyorPayout, stripeCurrency)
                                 .flatMap(transferId -> buildBilledResult(
                                         request, chargeId, transferId,
                                         totalTtc, conveyorPayout, platformFee)));

@@ -35,7 +35,7 @@ public class ConveyorVerificationService {
 
         return Mono.zip(
                 checkPermis(conveyor),
-                checkCasierB3(conveyor),
+                checkCasierB3(conveyor, request.getBackgroundCheckMaxAgeDays()),
                 checkHabilitation(conveyor, request.getVehicleSegment()),
                 checkReputationScore(conveyor),
                 keycloakBiometricAdapter.verifyIdentity(conveyor.getConveyorId())
@@ -90,7 +90,7 @@ public class ConveyorVerificationService {
         return Mono.just(new CheckResult(passed, failed, alerts));
     }
 
-    private Mono<CheckResult> checkCasierB3(ConveyorData conveyor) {
+    private Mono<CheckResult> checkCasierB3(ConveyorData conveyor, int maxAgeDays) {
         List<String> passed = new ArrayList<>();
         List<String> failed = new ArrayList<>();
         List<VerificationAlert> alerts = new ArrayList<>();
@@ -105,13 +105,13 @@ public class ConveyorVerificationService {
                     .build());
         } else {
             long daysOld = ChronoUnit.DAYS.between(conveyor.getCasierB3Date(), LocalDate.now());
-            if (daysOld <= 90) {
+            if (daysOld <= maxAgeDays) {
                 passed.add("CASIER_B3_VALIDE");
             } else {
                 failed.add("CASIER_B3_EXPIRE");
                 alerts.add(VerificationAlert.builder()
                         .code("CASIER_B3_EXPIRE")
-                        .message("Casier judiciaire B3 expiré (" + daysOld + " jours)")
+                        .message("Casier judiciaire B3 expiré (" + daysOld + " jours, max " + maxAgeDays + ")")
                         .severity(AlertSeverity.CRITICAL)
                         .blocking(true)
                         .build());

@@ -2,6 +2,7 @@
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/config/TenantContextFilter.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/config/WebClientConfig.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/enums/AlertSeverity.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/enums/ConvoyMarket.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/enums/LlmModel.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/enums/MissionState.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/enums/MissionUrgency.java
@@ -27,9 +28,17 @@
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/records/VerificationBlock.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/records/VerificationRequest.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/records/VerificationResult.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/tenant/ConvoyTenantConfig.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/domain/tenant/ConvoyTenantConfigRepository.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/kafka/KafkaEventPublisher.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/kafka/KafkaTopicsConfig.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/llm/FallbackLlmAdapter.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/llm/LlmGateway.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/llm/OllamaAdapter.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/llm/OllamaResponse.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/ConvoyScenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/worldwide/BackgroundCheckVariantScenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/worldwide/GlobalScalabilityScenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/worldwide/MultiCurrencyScenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/worldwide/TenantIsolationScenario.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-common/src/main/java/com/goweyy/convoyia/common/simulation/worldwide/WhiteLabelInvoiceScenario.java

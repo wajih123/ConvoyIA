@@ -128,6 +128,9 @@ public class PricingCalculationService {
                 .stripePreAuthAmount(stripePreAuth)
                 .minimumFareApplied(minimumApplied)
                 .appliedFormulaSummary(buildSummary(config))
+                .currencyCode(config.getCurrencyCode() != null ? config.getCurrencyCode() : "EUR")
+                .currencySymbol(config.getCurrencySymbol() != null ? config.getCurrencySymbol() : "€")
+                .taxName(config.getTaxName() != null ? config.getTaxName() : "TVA")
                 .build();
 
         return PricingResult.builder()

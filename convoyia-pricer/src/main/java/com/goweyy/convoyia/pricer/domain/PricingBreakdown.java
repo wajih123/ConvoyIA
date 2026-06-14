@@ -33,4 +33,12 @@ public class PricingBreakdown {
     boolean minimumFareApplied;
     /** Human-readable audit trail of applied formula parameters. */
     String appliedFormulaSummary;
+
+    // Multi-currency / multi-tenant fields
+    /** ISO 4217 currency code — from tenant config (e.g. "EUR", "GBP", "AED"). */
+    String currencyCode;
+    /** Currency symbol for display (e.g. "€", "£", "د.إ"). */
+    String currencySymbol;
+    /** Local tax name — from tenant config (e.g. "TVA", "VAT", "GST"). */
+    String taxName;
 }

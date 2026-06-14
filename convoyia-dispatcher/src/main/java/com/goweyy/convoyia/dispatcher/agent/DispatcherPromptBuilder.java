@@ -20,6 +20,11 @@ public class DispatcherPromptBuilder {
             """;
 
     public String buildQualificationPrompt(MissionRequest request) {
+        return buildQualificationPrompt(request, "french");
+    }
+
+    public String buildQualificationPrompt(MissionRequest request, String language) {
+        String jsonInstruction = resolveJsonInstruction(language);
         return """
                 Tu es un agent de qualification de mission pour une plateforme de convoyage automobile en France.
                 
@@ -37,7 +42,7 @@ public class DispatcherPromptBuilder {
                 Segments disponibles et leurs plages tarifaires:
                 %s
                 
-                Réponds UNIQUEMENT en JSON valide avec ce format:
+                %s
                 {
                   "segment": "SEGMENT_VALUE",
                   "confidence": 0.85,
@@ -52,11 +57,17 @@ public class DispatcherPromptBuilder {
                 request.getRequestedAt(),
                 request.getUrgency(),
                 request.getMetadata(),
-                SEGMENT_RANGES
+                SEGMENT_RANGES,
+                jsonInstruction
         );
     }
 
     public String buildRoutingPrompt(com.goweyy.convoyia.common.domain.records.MissionContext context) {
+        return buildRoutingPrompt(context, "french");
+    }
+
+    public String buildRoutingPrompt(com.goweyy.convoyia.common.domain.records.MissionContext context, String language) {
+        String jsonInstruction = resolveJsonInstruction(language);
         return """
                 Tu es un agent de routage pour une plateforme de convoyage automobile en France.
                 
@@ -69,7 +80,7 @@ public class DispatcherPromptBuilder {
                 Destination: %s
                 Confiance qualification: %.2f
                 
-                Réponds UNIQUEMENT en JSON valide avec ce format:
+                %s
                 {
                   "estimatedDurationMin": 120,
                   "preferredTimeSlot": "MATIN|APRES_MIDI|SOIR",
@@ -83,7 +94,21 @@ public class DispatcherPromptBuilder {
                 context.getOriginalRequest() != null ? context.getOriginalRequest().getUrgency() : "N/A",
                 context.getOriginalRequest() != null ? context.getOriginalRequest().getOriginAddress() : "N/A",
                 context.getOriginalRequest() != null ? context.getOriginalRequest().getDestinationAddress() : "N/A",
-                context.getConfidenceScore() != null ? context.getConfidenceScore() : 0.0
+                context.getConfidenceScore() != null ? context.getConfidenceScore() : 0.0,
+                jsonInstruction
         );
+    }
+
+    /**
+     * Resolves the JSON-only instruction string for the given language.
+     */
+    static String resolveJsonInstruction(String language) {
+        return switch (language == null ? "french" : language.toLowerCase()) {
+            case "french"  -> "Réponds UNIQUEMENT en JSON valide avec ce format:";
+            case "german"  -> "Antworte NUR mit gültigem JSON in diesem Format:";
+            case "spanish" -> "Responde ÚNICAMENTE en JSON válido con este formato:";
+            case "arabic"  -> "أجب فقط بـ JSON صالح بهذا الشكل:";
+            default        -> "Reply ONLY with valid JSON in this format:";
+        };
     }
 }

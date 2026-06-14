@@ -41,4 +41,12 @@ public class PricingFormulaConfig {
     boolean active;
     Instant createdAt;
     Instant updatedAt;
+
+    // Multi-currency / multi-tenant fields
+    /** ISO 4217 currency code — from tenant config (e.g. "EUR", "GBP", "AED"). Defaults to "EUR". */
+    String currencyCode;
+    /** Currency symbol for display (e.g. "€", "£", "د.إ"). Defaults to "€". */
+    String currencySymbol;
+    /** Local tax name (e.g. "TVA", "VAT", "GST"). Defaults to "TVA". */
+    String taxName;
 }
