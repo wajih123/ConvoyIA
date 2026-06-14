@@ -15,12 +15,13 @@ public class KafkaEventPublisher {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public Mono<Void> publishEvent(Object event, String topic) {
-        return Mono.fromCallable(() -> {
+        return Mono.fromFuture(() -> {
                     log.info("Publishing event to topic={} type={}", topic, event.getClass().getSimpleName());
-                    kafkaTemplate.send(topic, event);
-                    return null;
+                    return kafkaTemplate.send(topic, event).completable();
                 })
                 .subscribeOn(Schedulers.boundedElastic())
+                .doOnError(e -> log.error("Failed to publish event to topic={} type={}: {}",
+                        topic, event.getClass().getSimpleName(), e.getMessage()))
                 .then();
     }
 }

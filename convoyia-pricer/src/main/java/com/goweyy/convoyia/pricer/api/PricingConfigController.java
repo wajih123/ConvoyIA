@@ -37,23 +37,39 @@ public class PricingConfigController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    // Goweyy's platform fee ratio and minimum fare are locked — never overridable via API.
+    private static final String GOWEYY_TENANT_ID = "goweyy";
+    private static final java.math.BigDecimal GOWEYY_LOCKED_PLATFORM_FEE = new java.math.BigDecimal("0.25");
+    private static final java.math.BigDecimal GOWEYY_LOCKED_MINIMUM_FARE = new java.math.BigDecimal("30.00");
+
     /**
      * PUT update tenant pricing configuration.
      * White-label tenants use this to override Goweyy defaults.
      * tenantId extracted from X-Tenant-Id header — body tenantId is ignored.
+     * For Goweyy tenant: platformFeeRatio (0.25) and minimumFare (30.00) are LOCKED.
      */
     @PutMapping("/config")
     public Mono<ResponseEntity<Void>> updateConfig(
             @RequestHeader("X-Tenant-Id") String tenantId,
             @RequestBody PricingFormulaConfig config) {
         // Enforce tenantId from header — never trust body
+        java.math.BigDecimal platformFeeRatio = config.getPlatformFeeRatio();
+        java.math.BigDecimal minimumFare = config.getMinimumFare();
+
+        // Lock Goweyy-specific invariants
+        if (GOWEYY_TENANT_ID.equals(tenantId)) {
+            platformFeeRatio = GOWEYY_LOCKED_PLATFORM_FEE;
+            minimumFare = GOWEYY_LOCKED_MINIMUM_FARE;
+            log.warn("Goweyy locked values enforced: platformFeeRatio=0.25 minimumFare=30.00");
+        }
+
         PricingFormulaConfig securedConfig = PricingFormulaConfig.builder()
                 .tenantId(tenantId)
                 .transportMode(config.getTransportMode())
                 .ratePerKm(config.getRatePerKm())
                 .flatBaseFare(config.getFlatBaseFare())
-                .minimumFare(config.getMinimumFare())
-                .platformFeeRatio(config.getPlatformFeeRatio())
+                .minimumFare(minimumFare)
+                .platformFeeRatio(platformFeeRatio)
                 .vatRate(config.getVatRate())
                 .stripePreAuthMultiplier(config.getStripePreAuthMultiplier())
                 .insuranceConfig(config.getInsuranceConfig())

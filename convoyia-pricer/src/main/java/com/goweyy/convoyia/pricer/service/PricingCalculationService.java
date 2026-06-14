@@ -149,7 +149,7 @@ public class PricingCalculationService {
             return BigDecimal.ZERO;
         }
         return insurance.getVehicleCoverageTiers().stream()
-                .filter(tier -> vehicleValue < tier.getMaxVehicleValue())
+                .filter(tier -> vehicleValue <= tier.getMaxVehicleValue())
                 .findFirst()
                 .map(InsuranceTier::getCostPerMission)
                 .orElse(BigDecimal.ZERO); // LUXE_PLATEAU already handled upstream

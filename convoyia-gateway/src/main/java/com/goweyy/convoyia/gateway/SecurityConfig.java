@@ -13,6 +13,9 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
+                // CSRF disabled: this is a stateless REST API gateway that uses JWT ******
+                // CSRF attacks require cookie-based authentication — ****** are not sent
+                // automatically by browsers and are therefore not vulnerable to CSRF.
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         // Internal endpoints skip auth
