@@ -51,7 +51,7 @@ INSERT INTO convoy_tenant_configs (
     'EUR', '€', 'Europe/Paris', 'fr-FR', 'fr',
     'TVA', 0.2000,
     'Casier B3', 90,
-    '["B","BE"]',
+    '["B","BE"]',      -- B: car, BE: car + trailer (common for vehicle transport platforms)
     'Hiscox', 120000.00,
     'Bolt Business',
     0.2500, 30.00,
