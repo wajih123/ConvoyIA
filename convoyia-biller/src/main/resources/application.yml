@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: convoyia-biller
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:convoyia}
+    username: ${DB_USER:convoyia}
+    password: ${DB_PASSWORD:convoyia}
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:convoyia}
+    user: ${DB_USER:convoyia}
+    password: ${DB_PASSWORD:convoyia}
+    locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: biller-agent
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+server:
+  port: 8086
+
+stripe:
+  api-key: ${STRIPE_API_KEY}
+
+minio:
+  base-url: ${MINIO_BASE_URL:http://minio:9000}
+  bucket: ${MINIO_BUCKET:convoyia-invoices}
+
+hiscox:
+  base-url: ${HISCOX_BASE_URL:http://hiscox-api}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true

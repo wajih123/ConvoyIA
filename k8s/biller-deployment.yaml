@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convoyia-biller
+  namespace: convoyia
+  labels:
+    app: convoyia-biller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: convoyia-biller
+  template:
+    metadata:
+      labels:
+        app: convoyia-biller
+    spec:
+      containers:
+        - name: convoyia-biller
+          image: goweyy/convoyia-biller:latest
+          ports:
+            - containerPort: 8086
+          envFrom:
+            - configMapRef:
+                name: convoyia-config
+            - secretRef:
+                name: convoyia-secrets
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8086
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8086
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convoyia-biller
+  namespace: convoyia
+spec:
+  selector:
+    app: convoyia-biller
+  ports:
+    - port: 80
+      targetPort: 8086
