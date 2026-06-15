@@ -11,6 +11,7 @@ com/goweyy/convoyia/verifier/llm/VerifierPromptBuilder.class
 com/goweyy/convoyia/verifier/convoy/agent/ConvoyVerifierPromptBuilder.class
 com/goweyy/convoyia/verifier/convoy/agent/ConvoyMissionVerifier.class
 com/goweyy/convoyia/verifier/agent/ConveyorVerificationService.class
+com/goweyy/convoyia/verifier/convoy/agent/ConvoyVerifierAgent$1.class
 com/goweyy/convoyia/verifier/convoy/dto/ConvoyVerificationRequest$ConvoyVerificationRequestBuilder.class
 com/goweyy/convoyia/verifier/agent/ConveyorVerificationService$CheckResult.class
 com/goweyy/convoyia/verifier/convoy/dto/ConvoyVerificationBlock$ConvoyVerificationBlockBuilder.class

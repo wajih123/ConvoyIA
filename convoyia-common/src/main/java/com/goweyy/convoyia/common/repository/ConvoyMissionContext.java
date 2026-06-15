@@ -1,12 +1,16 @@
 package com.goweyy.convoyia.common.repository;
 
 import com.goweyy.convoyia.common.domain.enums.ConvoyMissionState;
+import com.goweyy.convoyia.common.domain.enums.ConvoyMissionType;
+import com.goweyy.convoyia.common.domain.enums.ConvoyUrgency;
+import com.goweyy.convoyia.common.domain.enums.ConvoyVehicleSegment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -34,11 +38,16 @@ public class ConvoyMissionContext {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "vehicle_segment")
-    private com.goweyy.convoyia.common.domain.enums.ConvoyVehicleSegment vehicleSegment;
+    private ConvoyVehicleSegment vehicleSegment;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "urgency")
-    private com.goweyy.convoyia.common.domain.enums.ConvoyUrgency urgency;
+    private ConvoyUrgency urgency;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mission_type")
+    @Builder.Default
+    private ConvoyMissionType missionType = ConvoyMissionType.SCHEDULED;
 
     @Column(name = "confidence_score")
     private Double confidenceScore;
@@ -57,6 +66,10 @@ public class ConvoyMissionContext {
 
     @Column(name = "client_aboard")
     private boolean clientAboard;
+
+    @Column(name = "surge_multiplier", precision = 5, scale = 4)
+    @Builder.Default
+    private BigDecimal surgeMultiplier = BigDecimal.ONE;
 
     @Lob
     @Column(name = "agent_trace", columnDefinition = "TEXT")

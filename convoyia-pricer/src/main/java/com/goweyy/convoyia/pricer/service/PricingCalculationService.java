@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.pricer.service;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.common.domain.enums.PricingStatus;
 import com.goweyy.convoyia.common.domain.enums.VehicleCoverageMode;
 import com.goweyy.convoyia.common.domain.enums.VehicleSegment;
@@ -128,7 +129,7 @@ public class PricingCalculationService {
                 .stripePreAuthAmount(stripePreAuth)
                 .minimumFareApplied(minimumApplied)
                 .appliedFormulaSummary(buildSummary(config))
-                .currencyCode(config.getCurrencyCode() != null ? config.getCurrencyCode() : "EUR")
+                .currencyCode(config.getCurrencyCode() != null ? config.getCurrencyCode() : ConvoyMarket.FRANCE.getCurrencyCode())
                 .currencySymbol(config.getCurrencySymbol() != null ? config.getCurrencySymbol() : "€")
                 .taxName(config.getTaxName() != null ? config.getTaxName() : "TVA")
                 .build();

@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.biller.service;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.biller.domain.BillingRequest;
 import com.goweyy.convoyia.biller.domain.BillingResult;
 import com.lowagie.text.*;
@@ -34,7 +35,7 @@ public class InvoiceGeneratorService {
      */
     public Mono<byte[]> generateClientInvoice(BillingRequest request, BillingResult result) {
         return Mono.fromCallable(() -> {
-            String currencyCode   = request.getCurrencyCode() != null ? request.getCurrencyCode() : "EUR";
+            String currencyCode   = request.getCurrencyCode() != null ? request.getCurrencyCode() : ConvoyMarket.FRANCE.getCurrencyCode();
             String currencySymbol = request.getCurrencySymbol() != null ? request.getCurrencySymbol() : "€";
             String taxName        = request.getTaxName() != null ? request.getTaxName() : "TVA";
             BigDecimal taxRate    = request.getTaxRate() != null ? request.getTaxRate() : new BigDecimal("0.20");
@@ -90,7 +91,7 @@ public class InvoiceGeneratorService {
      */
     public Mono<byte[]> generateConveyorReceipt(BillingRequest request, BillingResult result) {
         return Mono.fromCallable(() -> {
-            String currencyCode   = request.getCurrencyCode() != null ? request.getCurrencyCode() : "EUR";
+            String currencyCode   = request.getCurrencyCode() != null ? request.getCurrencyCode() : ConvoyMarket.FRANCE.getCurrencyCode();
             String currencySymbol = request.getCurrencySymbol() != null ? request.getCurrencySymbol() : "€";
             String tenantName     = request.getTenantName() != null ? request.getTenantName() : "Goweyy";
             String timezone       = request.getTimezone() != null ? request.getTimezone() : "Europe/Paris";

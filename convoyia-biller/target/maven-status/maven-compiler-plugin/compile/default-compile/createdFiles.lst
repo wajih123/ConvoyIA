@@ -16,3 +16,4 @@ com/goweyy/convoyia/biller/convoy/dto/ConvoyBillingResult$ConvoyBillingResultBui
 com/goweyy/convoyia/biller/api/BillerController.class
 com/goweyy/convoyia/biller/convoy/agent/ConvoyInvoiceGeneratorService.class
 com/goweyy/convoyia/biller/convoy/api/ConvoyBillerController.class
+com/goweyy/convoyia/biller/convoy/agent/ConvoyBillerAgent$1.class

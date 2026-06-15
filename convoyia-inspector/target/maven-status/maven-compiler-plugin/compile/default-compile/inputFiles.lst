@@ -4,6 +4,7 @@
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/api/InspectorController.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/agent/ConvoyInspectorAgent.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/agent/ConvoyInspectorPromptBuilder.java
+/home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/agent/ConvoySignatureService.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/api/ConvoyInspectorController.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/dto/ConvoyDamageReport.java
 /home/runner/work/ConvoyIA/ConvoyIA/wajih123/ConvoyIA/convoyia-inspector/src/main/java/com/goweyy/convoyia/inspector/convoy/dto/ConvoyInspectionRequest.java

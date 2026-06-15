@@ -60,7 +60,7 @@ public class PricingConfigController {
         if (GOWEYY_TENANT_ID.equals(tenantId)) {
             platformFeeRatio = GOWEYY_LOCKED_PLATFORM_FEE;
             minimumFare = GOWEYY_LOCKED_MINIMUM_FARE;
-            log.warn("Goweyy locked values enforced: platformFeeRatio=0.25 minimumFare=30.00");
+            log.warn("Goweyy locked values enforced: platformFeeRatio={} minimumFare={}", GOWEYY_LOCKED_PLATFORM_FEE, GOWEYY_LOCKED_MINIMUM_FARE);
         }
 
         PricingFormulaConfig securedConfig = PricingFormulaConfig.builder()

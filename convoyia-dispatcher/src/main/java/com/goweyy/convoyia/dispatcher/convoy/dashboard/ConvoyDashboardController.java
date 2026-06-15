@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.dispatcher.convoy.dashboard;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.common.repository.ConvoyMissionContext;
 import com.goweyy.convoyia.common.repository.ConvoyMissionContextRepository;
 import com.goweyy.convoyia.dispatcher.convoy.dashboard.dto.ConvoyMissionSummary;
@@ -38,7 +39,7 @@ public class ConvoyDashboardController {
                 .failedMissions(byState.getOrDefault("FAILED", 0L))
                 .escalatedMissions(byState.getOrDefault("ESCALATED_HUMAN", 0L))
                 .totalRevenueTtc(BigDecimal.ZERO) // TODO: sum from billing records
-                .currencyCode("EUR")
+                .currencyCode(ConvoyMarket.FRANCE.getCurrencyCode())
                 .missionsByState(byState)
                 .build();
 

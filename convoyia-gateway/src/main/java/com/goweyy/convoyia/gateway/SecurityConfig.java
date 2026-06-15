@@ -13,21 +13,27 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
-                // CSRF disabled: this is a stateless REST API gateway that uses JWT ******
-                // CSRF attacks require cookie-based authentication — ****** are not sent
-                // automatically by browsers and are therefore not vulnerable to CSRF.
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        // Internal endpoints skip auth
                         .pathMatchers("/api/v1/convoy/*/internal/**").permitAll()
-                        // Actuator health checks
+                        .pathMatchers("/api/v1/convoy/verify/internal").permitAll()
                         .pathMatchers("/actuator/health/**").permitAll()
-                        // All other routes require JWT
+                        .pathMatchers("/api/v1/convoy/broadcast/heartbeat").hasRole("DRIVER")
+                        .pathMatchers("/api/v1/convoy/broadcast/accept").hasRole("DRIVER")
+                        .pathMatchers("/api/v1/convoy/broadcast/**").authenticated()
+                        .pathMatchers("/api/v1/convoy/dispatch/**").hasAnyRole("CLIENT", "B2B")
+                        .pathMatchers("/api/v1/convoy/verify/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/convoy/price/**").hasAnyRole("CLIENT", "B2B")
+                        .pathMatchers("/api/v1/convoy/inspect/**").hasRole("DRIVER")
+                        .pathMatchers("/api/v1/convoy/track/**").authenticated()
+                        .pathMatchers("/api/v1/convoy/bill/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/convoy/schedule/**").authenticated()
+                        .pathMatchers("/api/v1/convoy/dispute/**").authenticated()
+                        .pathMatchers("/api/v1/convoy/dashboard/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/convoy/simulation/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> {})
-                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
                 .build();
     }
 }

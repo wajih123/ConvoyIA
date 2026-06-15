@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.common.simulation.worldwide;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.common.simulation.ConvoyScenario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class WhiteLabelInvoiceScenario implements ConvoyScenario {
         log.info("[Scenario] {} — start", name());
 
         InvoiceSpec goweyy = new InvoiceSpec(
-                "goweyy", "Goweyy", "EUR", "€", "TVA", "0.20");
+                "goweyy", "Goweyy", ConvoyMarket.FRANCE.getCurrencyCode(), "€", "TVA", "0.20");
         InvoiceSpec uk = new InvoiceSpec(
                 "convoyia-uk-demo", "ConvoyIA UK Demo", "GBP", "£", "VAT", "0.20");
 

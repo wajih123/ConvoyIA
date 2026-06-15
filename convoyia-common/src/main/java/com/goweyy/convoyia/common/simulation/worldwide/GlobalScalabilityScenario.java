@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.common.simulation.worldwide;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.common.simulation.ConvoyScenario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -77,7 +78,7 @@ public class GlobalScalabilityScenario implements ConvoyScenario {
         }
 
         // Assert currency isolation per tenant
-        assertCurrencyIsolation(results, "goweyy", "EUR");
+        assertCurrencyIsolation(results, "goweyy", ConvoyMarket.FRANCE.getCurrencyCode());
         assertCurrencyIsolation(results, "convoyia-uk-demo", "GBP");
         assertCurrencyIsolation(results, "convoyia-uae-demo", "AED");
 
@@ -110,7 +111,7 @@ public class GlobalScalabilityScenario implements ConvoyScenario {
 
     private List<MissionSpec> buildMissionSpecs() {
         List<MissionSpec> specs = new ArrayList<>();
-        for (int i = 0; i < 20; i++) specs.add(new MissionSpec("goweyy", "EUR", "0.20", "0.25", "30.00"));
+        for (int i = 0; i < 20; i++) specs.add(new MissionSpec("goweyy", ConvoyMarket.FRANCE.getCurrencyCode(), "0.20", "0.25", "30.00"));
         for (int i = 0; i < 20; i++) specs.add(new MissionSpec("convoyia-uk-demo", "GBP", "0.20", "0.25", "25.00"));
         for (int i = 0; i < 10; i++) specs.add(new MissionSpec("convoyia-uae-demo", "AED", "0.05", "0.25", "120.00"));
         return specs;

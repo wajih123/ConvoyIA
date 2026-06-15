@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.pricer.repository;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goweyy.convoyia.common.domain.enums.TransportPricingMode;
@@ -165,7 +166,7 @@ public class TenantPricingConfigRepository {
                     .insuranceConfig(insurance)
                     .segmentSurcharges(surcharges)
                     .contextMultipliers(multipliers)
-                    .currencyCode(row.get("currency_code") != null ? (String) row.get("currency_code") : "EUR")
+                    .currencyCode(row.get("currency_code") != null ? (String) row.get("currency_code") : ConvoyMarket.FRANCE.getCurrencyCode())
                     .currencySymbol(row.get("currency_symbol") != null ? (String) row.get("currency_symbol") : "€")
                     .taxName(row.get("tax_name") != null ? (String) row.get("tax_name") : "TVA")
                     .active(Boolean.TRUE.equals(row.get("active")))

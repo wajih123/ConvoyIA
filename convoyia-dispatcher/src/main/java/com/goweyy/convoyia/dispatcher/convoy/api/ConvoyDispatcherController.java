@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/convoy/dispatch")
+@RequestMapping("/api/v1/convoy/dispatch")
 @RequiredArgsConstructor
 public class ConvoyDispatcherController {
 

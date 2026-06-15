@@ -27,4 +27,17 @@ public class ConvoyStripeConnectService {
         // TODO: integrate with Stripe Connect Transfer API
         return "tr_convoy_" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
     }
+
+    public String cancelPreAuth(String paymentIntentId) {
+        log.info("ConvoyStripeConnectService cancelPreAuth intentId={}", paymentIntentId);
+        // TODO: PaymentIntent.cancel() via Stripe Java SDK
+        return "cancelled_" + paymentIntentId;
+    }
+
+    public String createRefund(String paymentIntentId, BigDecimal amount, String currency, String reason) {
+        log.info("ConvoyStripeConnectService createRefund intentId={} amount={} currency={} reason={}",
+                paymentIntentId, amount, currency, reason);
+        // TODO: Refund.create() via Stripe Java SDK
+        return "re_convoy_" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+    }
 }

@@ -1,5 +1,6 @@
 package com.goweyy.convoyia.common.simulation.worldwide;
 
+import com.goweyy.convoyia.common.domain.enums.ConvoyMarket;
 import com.goweyy.convoyia.common.simulation.ConvoyScenario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class MultiCurrencyScenario implements ConvoyScenario {
         // Tenant: goweyy (France)
         TenantPricingContext frCtx = TenantPricingContext.builder()
                 .tenantId("goweyy")
-                .currencyCode("EUR")
+                .currencyCode(ConvoyMarket.FRANCE.getCurrencyCode())
                 .currencySymbol("€")
                 .taxName("TVA")
                 .taxRate(new BigDecimal("0.20"))
@@ -64,7 +65,7 @@ public class MultiCurrencyScenario implements ConvoyScenario {
                 .baseFare(new BigDecimal("340.00"))
                 .build();
 
-        assertPricingResult(frCtx, "EUR", "TVA", new BigDecimal("0.20"));
+        assertPricingResult(frCtx, ConvoyMarket.FRANCE.getCurrencyCode(), "TVA", new BigDecimal("0.20"));
         assertPricingResult(gbCtx, "GBP", "VAT", new BigDecimal("0.20"));
         assertPricingResult(aeCtx, "AED", "VAT", new BigDecimal("0.05"));
 

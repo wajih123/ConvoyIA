@@ -16,6 +16,17 @@ public class ConvoyAnomalyDetectionService {
     private static final double MAX_SPEED_KMH = 130.0;
 
     public Optional<ConvoyAnomalyAlert> detectAnomaly(ConvoyGpsPosition position) {
+        if (position.getSpeedKmh() < 1.0d) {
+            return Optional.of(ConvoyAnomalyAlert.builder()
+                    .missionId(position.getMissionId())
+                    .tenantId(position.getTenantId())
+                    .anomalyType("LONG_STOP")
+                    .severity(ConvoyAlertSeverity.CRITICAL)
+                    .description("Vehicle appears stopped for anomaly review")
+                    .position(position)
+                    .detectedAt(Instant.now())
+                    .build());
+        }
         if (position.getSpeedKmh() > MAX_SPEED_KMH) {
             log.warn("Speed anomaly detected missionId={} speed={}", position.getMissionId(), position.getSpeedKmh());
             return Optional.of(ConvoyAnomalyAlert.builder()
@@ -23,8 +34,7 @@ public class ConvoyAnomalyDetectionService {
                     .tenantId(position.getTenantId())
                     .anomalyType("SPEED_EXCEEDED")
                     .severity(ConvoyAlertSeverity.WARNING)
-                    .description(String.format("Speed %.1f km/h exceeds limit of %.1f km/h",
-                            position.getSpeedKmh(), MAX_SPEED_KMH))
+                    .description(String.format("Speed %.1f km/h exceeds limit of %.1f km/h", position.getSpeedKmh(), MAX_SPEED_KMH))
                     .position(position)
                     .detectedAt(Instant.now())
                     .build());
